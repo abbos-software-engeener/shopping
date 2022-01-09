@@ -27,13 +27,13 @@ class ClientLogin(View):
     def post(self, request):
         form = LoginForm(data=request.POST)
         if form.is_valid():
-            user = authenticate(request, username=form.cleaned_data['username'], phone=form.cleaned_data['phone'])
+            user = authenticate(request, phone=form.cleaned_data['phone'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
 
                 messages.success(request, ("{} Siz tizimga kirdingiz.) ".format(user.username)))
 
-                return redirect('main:index')
+                return redirect('/admin/')
 
             form.add_error('telefon', "Login va/yoki parrol noto'g'ri!")
 

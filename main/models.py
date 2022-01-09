@@ -33,7 +33,6 @@ class UserManager(BaseUserManager):
         """Create and save a SuperUser with the given phone and password."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('user_access_level', 1)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
@@ -45,9 +44,12 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     photo = models.ImageField(upload_to=UploadTo("Profile"))
-    phone_number = models.CharField(unique=True, max_length=13, blank=True, null=True)
+    username = None
+    email = None
+    phone = models.CharField(unique=True, max_length=13, blank=True, null=True)
     objects = UserManager()
-
+    USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = []
     class Meta:
         verbose_name = "Foydalanuvchi"
         verbose_name_plural = "Foydalanuvchilar"
