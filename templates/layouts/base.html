@@ -31,9 +31,8 @@
                        role="button" data-toggle="dropdown">
                         <img src="{{ request.user.avatar }}" class="cover user-avatar rounded-circle"/>
                     </a>
-
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'client:login' %}">Tizimga kirish</a>
+                    <a class="nav-link" href="{% url 'main:login' %}">Tizimga kirish</a>
                 </li>
             {% endif %}
             </li>

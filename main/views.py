@@ -1,14 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import User
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import UpdateView
+from django.contrib.auth import authenticate, login
 
-from .form import LoginForm
+from django.shortcuts import render, redirect
+from django.views import View
+
+from .form import LoginForm, CategoryForm
+from .models import *
 
 
 class ClientLogin(View):
@@ -21,8 +18,6 @@ class ClientLogin(View):
         return render(request, 'layouts/form.html', {
             'form': LoginForm()
         })
-
-
 
     def post(self, request):
         form = LoginForm(data=request.POST)
@@ -40,3 +35,26 @@ class ClientLogin(View):
         return render(request, 'main/login.html', {
             'form': form
         })
+
+
+def category_list(request):
+    carmodel = Category.objects.all()
+    ctx = {
+        'carmodel': carmodel,
+    }
+    return render(request, 'main/category/list.html', ctx)
+
+
+def category_create(request):
+    model = Category()
+    form = CategoryForm(request.POST, request.FILES, instance=model)
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            return redirect('category_list')
+        else:
+            print(form.errors)
+    ctx = {
+        "form": form
+    }
+    return render(request, 'main/category/form.html', ctx)

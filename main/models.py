@@ -2,14 +2,11 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 import os
-
 from django.conf import settings
-
 from shopping.helpers import UploadTo
 
 
 class UserManager(BaseUserManager):
-    """Define a model manager for User model with no username field."""
 
     use_in_migrations = True
 
@@ -50,6 +47,7 @@ class User(AbstractUser):
     objects = UserManager()
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = []
+
     class Meta:
         verbose_name = "Foydalanuvchi"
         verbose_name_plural = "Foydalanuvchilar"
@@ -62,17 +60,33 @@ class User(AbstractUser):
         return os.path.join(settings.STATIC_URL, "img/no_avatar.jpg")
 
 
-class Catalog(models.Model):
+class Category(models.Model):
     title = models.CharField(max_length=100)
-    image1=models.ImageField()
-    image2=models.ImageField(blank=True)
-    image3=models.ImageField(blank=True)
-    image4=models.ImageField(blank=True)
-    image5=models.ImageField(blank=True)
-    image6=models.ImageField(blank=True)
-    image7=models.ImageField(blank=True)
-    image8=models.ImageField(blank=True)
-    image9=models.ImageField(blank=True)
-    image10=models.ImageField(blank=True)
-    image11=models.ImageField(blank=True)
-    image12=models.ImageField(blank=True)
+    image1 = models.ImageField(upload_to='category/')
+    image2 = models.ImageField(blank=True, upload_to='category/')
+    image3 = models.ImageField(blank=True, upload_to='category/')
+    image4 = models.ImageField(blank=True, upload_to='category/')
+    image5 = models.ImageField(blank=True, upload_to='category/')
+    image6 = models.ImageField(blank=True, upload_to='category/')
+    image7 = models.ImageField(blank=True, upload_to='category/')
+    image8 = models.ImageField(blank=True, upload_to='category/')
+    image9 = models.ImageField(blank=True, upload_to='category/')
+    image10 = models.ImageField(blank=True, upload_to='category/')
+    image11 = models.ImageField(blank=True, upload_to='category/')
+    image12 = models.ImageField(blank=True, upload_to='category/')
+
+
+class Pans(models.Model):
+    title = models.CharField(max_length=100)
+    photo = models.ImageField(upload_to='pans/')
+    payment = models.ForeignKey('Payment', on_delete=models.CASCADE)
+
+
+class Payment(models.Model):
+    CHOICES = (
+        (1, 'NAQD'),
+        (2, 'Karta')
+    )
+    pay_method = models.CharField(max_length=100, choices=CHOICES)
+    address = models.CharField(max_length=255)
+
